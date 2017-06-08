@@ -47,13 +47,23 @@ cnt = contours[0]
 #--cv2.drawContours(img_threshold, contours, -1, (255,0,0), 3)
 #--cv2.imshow('contour',img_threshold)
 
+mean_area = 0
+count = 0
+for i, c in enumerate(contours):
+	mean_area += cv2.contourArea(c)
+	count += 1
+mean_area /= count
 
-area_threshold = cv2.contourArea(cnt) / 2
+print mean_area
+print cv2.contourArea(cnt)
+
+
+#area_threshold = cv2.contourArea(cnt) / 2	
 
 for i, c in enumerate(contours):
         area = cv2.contourArea(c)
         # area can be configured
-        if area > area_threshold:
+        if area > mean_area:
             print i
             cv2.drawContours(img_threshold, contours, i, (255, 0, 0), -1)
 
