@@ -25,7 +25,8 @@ plt.axis('off')
 plt.savefig('visual.jpg')
 
 #Reading the Image using opencv
-img = cv2.imread('visual.jpg',0)
+img_1 = cv2.imread('visual.jpg',1)
+img = cv2.cvtColor(img_1, cv2.COLOR_BGR2GRAY)
 
 # Making the kernal
 kernal = np.ones((25,25), np.float32)/625
@@ -37,13 +38,34 @@ smoothed = cv2.filter2D(img,-1,kernal)
 ret, img_threshold = cv2.threshold(smoothed, 220, 255, cv2.THRESH_BINARY_INV)
 
 # Displaying Smoothed and image treated with threshold
-cv2.imshow('thresh',img_threshold)
-cv2.imshow('smoothed',smoothed)
+#--cv2.imshow('thresh',img_threshold)
+#--cv2.imshow('smoothed',smoothed)
 
 
 contours,hierarchy = cv2.findContours(img_threshold,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-cv2.drawContours(img_threshold, contours, -1, (255,0,0), 3)
-cv2.imshow('contour',img_threshold)
+cnt = contours[0]
+#--cv2.drawContours(img_threshold, contours, -1, (255,0,0), 3)
+#--cv2.imshow('contour',img_threshold)
+
+
+area_threshold = cv2.contourArea(cnt) / 2
+
+for i, c in enumerate(contours):
+        area = cv2.contourArea(c)
+        # area can be configured
+        if area > area_threshold:
+            print i
+            cv2.drawContours(img_threshold, contours, i, (255, 0, 0), -1)
+
+cv2.imshow('threhsold',img_threshold)
+
+#--(x,y),radius = cv2.minEnclosingCircle(cnt)
+#--center = (int(x),int(y))
+#--radius = int(radius)
+#--cv2.circle(img_1,center,radius,(0,0,255),3)
+#--cv2.imshow('image',img_1)
+
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
