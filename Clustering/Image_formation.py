@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Reading csv file and considering only 2 features
-fp = open('dataset.csv','r')
+fp = open('datasets.csv','r')
 petal_length = [] 
 petal_width = []
 #petal_class = []
