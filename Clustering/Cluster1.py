@@ -7,14 +7,14 @@ import matplotlib.pyplot as plt
 fp = open('dataset.csv','r')
 petal_length = [] 
 petal_width = []
-petal_class = []
+#petal_class = []
 line = fp.readline()
 
 while len(line) != 0:    
     data = line.split(',')
     petal_length.append(data[2])
     petal_width.append(data[3])
-    petal_class.append(data[4])
+    #petal_class.append(data[4])
     line = fp.readline()
    
 fp.close()
@@ -25,14 +25,24 @@ plt.axis('off')
 plt.savefig('visual.jpg')
 
 #Reading the Image using opencv
-img = cv2.imread('visual.jpg',1)
+img = cv2.imread('visual.jpg',0)
 
 # Making the kernal
 kernal = np.ones((15,15), np.float32)/225
 
 # Blurring the points
 smoothed = cv2.filter2D(img,-1,kernal)
+
+# Applying Threshold
+ret, img_threshold = cv2.threshold(smoothed, 220, 255, cv2.THRESH_BINARY)
+
+# Displaying Smoothed and image treated with threshold
+cv2.imshow('thresh',img_threshold)
 cv2.imshow('smoothed',smoothed)
+
+#Applying Contour to the threshold image
+plt.contour(img_threshold)
+plt.show()
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
